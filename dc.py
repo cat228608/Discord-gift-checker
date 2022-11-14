@@ -6,55 +6,51 @@ from os import system
 import ctypes
 import requests
 import threading
+import os
 
 times = int(input('Timeout: '))
 thr = int(input("Thread: "))
 lists = str(input("Autoload proxy list?(y/n): "))
+dead = 0
 valid = 0
 invalid = 0
 
+pars_proxy = [
+'https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-https.txt',
+'https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt',
+'https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt',
+'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt',
+'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/https.txt',
+'https://advanced.name/freeproxy/636f77b0c6e9d',
+'https://raw.githubusercontent.com/mmpx12/proxy-list/master/https.txt',
+'https://raw.githubusercontent.com/UptimerBot/proxy-list/main/proxies/http.txt',
+'https://raw.githubusercontent.com/rx443/proxy-list/main/online/https.txt',
+'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt',
+'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt',
+'https://raw.githubusercontent.com/zevtyardt/proxy-list/main/http.txt',
+'https://raw.githubusercontent.com/saschazesiger/Free-Proxies/master/proxies/http.txt'
+]
+
 if lists == "y":
-    print("parsing...")
-    try:
-        proxys = requests.get("https://raw.githubusercontent.com/jetkai/proxy-list/main/online-proxies/txt/proxies-https.txt").text
-        my_file = open("proxy.txt", "at")
-        my_file.write(f"{proxys}\n")
-        my_file.close()
-        print("Good pars...")
-    except:
-        print("Error num 1")
-    try:
-        proxys = requests.get("https://raw.githubusercontent.com/clarketm/proxy-list/master/proxy-list-raw.txt").text
-        my_file = open("proxy.txt", "at")
-        my_file.write(f"{proxys}\n")
-        my_file.close()
-        print("Good pars...")
-    except:
-        print("Error num 2")
-    try:
-        proxys = requests.get("https://raw.githubusercontent.com/TheSpeedX/PROXY-List/master/http.txt").text
-        my_file = open("proxy.txt", "at")
-        my_file.write(f"{proxys}\n")
-        my_file.close()
-        print("Good pars...")
-    except:
-        print("Error num 3")
-    try:
-        proxys = requests.get("https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt").text
-        my_file = open("proxy.txt", "at")
-        my_file.write(f"{proxys}\n")
-        my_file.close()
-        print("Good pars...")
-    except:
-        print("Error num 4")
-    try:
-        proxys = requests.get("https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/https.txt").text
-        my_file = open("proxy.txt", "at")
-        my_file.write(f"{proxys}")
-        my_file.close()
-        print("End pars")
-    except:
-        print("Error num 5")
+    print("Parsing...")
+    for site in pars_proxy:
+        try:
+            proxys = requests.get(site).text
+            my_file = open("proxy1.txt", "at")
+            my_file.write(f"{proxys}\n")
+            my_file.close()
+            print(f"Good pars...")
+        except:
+            print(f"Error pars...")
+    print("Deleting duplicates...")
+    
+    lines_set = set()
+    with open(r"proxy1.txt", "r") as fin, open(r"proxy.txt", "w") as fout:
+        for line in fin:
+            if line not in lines_set:
+                fout.write(line)
+            lines_set.add(line)
+    os.remove("proxy1.txt")
     
     file = open('proxy.txt').read().split('\n')
 else:
@@ -79,14 +75,19 @@ def check(pro):
                 valid = valid + 1
                 with open("Codes.txt", "w") as file:
                     file.write(code)
-
+                    
+            elif response.status_code == 429:
+                time.sleep(5)
+                
             else:
-                print(f'[Invalid] {code}')
+                print(f'[Invalid] {code} Статус: {response.status_code}')
                 invalid = invalid + 1
         except:
+            global dead
+            dead = dead + 1
             time.sleep(30)
         
-        system("title " + f"Valid: {valid} Invalid: {invalid}")
+        system("title " + f"Valid: {valid} Invalid: {invalid} Error: {dead}")
         if time != 0:
             time.sleep(int(times))
      
