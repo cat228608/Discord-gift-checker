@@ -22,7 +22,7 @@ pars_proxy = [
 'https://raw.githubusercontent.com/monosans/proxy-list/main/proxies/http.txt',
 'https://raw.githubusercontent.com/ShiftyTR/Proxy-List/master/https.txt',
 'https://advanced.name/freeproxy/636f77b0c6e9d',
-'https://raw.githubusercontent.com/mmpx12/proxy-list/master/https.txt',
+'https://raw.githubusercontent.com/mmpx12/proxy-list/master/https.txt', #Аня моя радость, моя любовь, и моя жизнь
 'https://raw.githubusercontent.com/UptimerBot/proxy-list/main/proxies/http.txt',
 'https://raw.githubusercontent.com/rx443/proxy-list/main/online/https.txt',
 'https://raw.githubusercontent.com/MuRongPIG/Proxy-Master/main/http.txt',
